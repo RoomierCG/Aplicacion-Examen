@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "947033496506",
+    "firebase_url": "https://com-roomiercg-madlab.firebaseio.com",
+    "project_id": "com-roomiercg-madlab",
+    "storage_bucket": "com-roomiercg-madlab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947033496506:android:89b79afa8e07bba7e35b83",
+        "android_client_info": {
+          "package_name": "com.roomiercg.madlab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947033496506-g791js886gnnsiu0i3mut0374iu7ro7c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roomiercg.madlab",
+            "certificate_hash": "d04d7b7bf4b765bff9d3d7700162cd203ae960f7"
+          }
+        },
+        {
+          "client_id": "947033496506-chllpkih49rfj7h8urm62goavarldgjn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1V9hJKo_Qje3cSpt3pvMBRsRiC-ownG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "947033496506-chllpkih49rfj7h8urm62goavarldgjn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

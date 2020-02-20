@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MadLab</string>
+    <string name="entrar">Entrar</string>
+    <string name="register">¡Registrarte!</string>
+    <string name="login">¡Iniciar Sesion!</string>
+    <string name="crear">Crear</string>
+    <string name="Autor">From <b>Edgar Alexnader Calle Granda</b></string>
+    <string name="logout">logout</string>
+
+    <style name="wrapcontent">WrapContent</style>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
