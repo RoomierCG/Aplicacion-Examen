@@ -35,6 +35,11 @@ public class UsersFragment extends Fragment {
     private UserAdapter  userAdapter;
     private List<User> mUser;
 
+    /*
+        Aqui Useramos la clase UserAdapter creada anteriormente, al crear la vista al recycler view
+        le pasaremos parametros e inicializamos un futura lista de usuarios y ReadUser()
+     */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,6 +53,12 @@ public class UsersFragment extends Fragment {
 
         return view;
     }
+
+    /*
+        Con este metodo recorremos la base de datos en busca de todos los usuarios que esten dados
+        de alta menos a nosotros mismo, esto lo hace de forma iterable para pasarselo al recyclerView
+        Y este los vaya creando.
+     */
 
     private void readUser() {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
