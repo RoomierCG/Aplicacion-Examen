@@ -3,6 +3,8 @@ package com.roomiercg.madlab;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +26,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.roomiercg.madlab.Adapter.MessageAdapter;
+import com.roomiercg.madlab.Model.Chat;
 import com.roomiercg.madlab.Model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,6 +43,10 @@ public class MessageActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
+
+    MessageAdapter messageAdapter;
+    List<Chat> mChat;
+    RecyclerView recyclerView;
 
     Intent intent;
 
@@ -50,7 +61,7 @@ public class MessageActivity extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.getOverflowIcon().setColorFilter(Color.WHITE , PorterDuff.Mode.SRC_ATOP);
+        toolbar.getOverflowIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setTitle("");
 
         //La barra que nos proporciona android la cambiamos de color a blanco programaticamente
@@ -66,6 +77,12 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         profile_image = findViewById(R.id.profile_image);
         username = findViewById(R.id.username);
         btn_send = findViewById(R.id.btn_send);
@@ -80,7 +97,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String msg = text_send.getText().toString();
 
-                if(!msg.equals("")){
+                if (!msg.equals("")) {
                     sendMessage(firebaseUser.getUid(), userid, msg);
                 } else {
                     Toast.makeText(MessageActivity.this, "No puedes enviar mensajes vacios", Toast.LENGTH_SHORT).show();
@@ -98,11 +115,13 @@ public class MessageActivity extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
 
-                if(user.getImageURL().equals("default")){
+                if (user.getImageURL().equals("default")) {
                     profile_image.setImageResource(R.mipmap.ic_launcher);
-                }else{
+                } else {
                     Glide.with(MessageActivity.this).load(user.getImageURL()).into(profile_image);
                 }
+
+                readMessage(firebaseUser.getUid(), userid, user.getImageURL());
             }
 
             @Override
@@ -111,17 +130,44 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String sender, String reciever, String message){
+    private void sendMessage(String sender, String reciever, String message) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender",sender);
-        hashMap.put("reciever",reciever);
-        hashMap.put("message",message);
+        hashMap.put("sender", sender);
+        hashMap.put("reciever", reciever);
+        hashMap.put("message", message);
 
         reference.child("Chats").push().setValue(hashMap);
 
+    }
+
+    private void readMessage(final String myid, final String userid, final String imageurl) {
+        mChat = new ArrayList<>();
+
+        reference = FirebaseDatabase.getInstance().getReference().child("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mChat.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReciever().equals(myid) && chat.getSender().equals(userid) ||
+                            chat.getReciever().equals(userid) && chat.getSender().equals(myid)) {
+                        mChat.add(chat);
+                    }
+
+                    messageAdapter = new MessageAdapter(MessageActivity.this,mChat,imageurl );
+                    recyclerView.setAdapter(messageAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
