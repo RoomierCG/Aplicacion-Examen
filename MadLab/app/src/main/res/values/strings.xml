@@ -6,6 +6,7 @@
     <string name="crear">Crear</string>
     <string name="Autor">From <b>Edgar Alexnader Calle Granda</b></string>
     <string name="logout">logout</string>
+    <string name="text_send">Escribe tu mensaje...</string>
 
     <style name="wrapcontent">WrapContent</style>
 
